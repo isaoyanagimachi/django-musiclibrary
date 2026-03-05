@@ -1,8 +1,16 @@
 from django.db import models
+
+class Genre(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return f"{self.name}"
+
+
 class Artist(models.Model):
     name = models.CharField(max_length=100)
     country = models.CharField(max_length=100, blank=True)
-    genre = models.CharField(max_length=100, blank=True)
+    genre = models.ManyToManyField(Genre, related_name='Artists')
 
     def __str__(self):
         return self.name
@@ -26,12 +34,6 @@ class Track(models.Model):
     def __str__(self):
         return f"{self.track_Number}.{self.title}"
 
-class Genre(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-    artists = models.ManyToManyField(Artist, related_name='Genre')
-
-    def __str__(self):
-        return f"{self.name}"
 
 
 # Create your models here.

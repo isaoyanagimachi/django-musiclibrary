@@ -1,0 +1,29 @@
+{% extends "core/base.html" %}
+
+{% block title %}{{ album.title }} - PostgreSQL Rescue{% endblock %}
+
+{% block content %}
+<h2>{{ album.title }}</h2>
+<p>Artist: {{ album.artist.name }}</p>
+{% if album.release_Year %}
+<p>Year: {{ album.release_Year }}</p>
+{% endif %}
+<p>Concept album: {{ album.is_Concept_Album|yesno:"Yes,No" }}</p>
+
+<p>
+    <a href="{% url 'album_update' album.pk %}">Edit</a> |
+    <a href="{% url 'album_delete' album.pk %}">Delete</a> |
+    <a href="{% url 'album_list' %}">Back to list</a>
+</p>
+
+<h3>Tracks</h3>
+{% if tracks %}
+    <ol>
+    {% for track in tracks %}
+        <li>{{ track.track_Number }}. {{ track.title }} ({{ track.duration_Seconds }}s)</li>
+    {% endfor %}
+    </ol>
+{% else %}
+    <p>No tracks added yet.</p>
+{% endif %}
+{% endblock %}

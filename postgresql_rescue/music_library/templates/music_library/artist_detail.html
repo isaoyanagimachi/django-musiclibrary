@@ -1,0 +1,41 @@
+{% extends "core/base.html" %}
+
+{% block title %}{{ artist.name }} Details{% endblock %}
+
+{% block content %}
+<h2>Artist: {{ artist.name }}</h2>
+<p><strong>Country:</strong> {{ artist.country|default:"N/A" }}</p>
+<p><strong>Genres:</strong> 
+    {% for g in artist.genre.all %}
+        <span class="badge">{{ g.name }}</span>{% if not forloop.last %}, {% endif %}
+    {% endfor %}
+</p>
+
+<hr>
+
+<h3>Discography ({{ albums.count }} Albums)</h3>
+{% if albums %}
+    <table>
+        <thead>
+            <tr>
+                <th>Year</th>
+                <th>Title</th>
+                <th>Concept?</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for album in albums %}
+            <tr>
+                <td>{{ album.release_Year|default:"----" }}</td>
+                <td><a href="{% url 'album_detail' album.pk %}">{{ album.title }}</a></td>
+                <td>{{ album.is_Concept_Album|yesno:"✅,❌" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No albums recorded for this artist yet.</p>
+{% endif %}
+
+<p><a href="{% url 'artist_list' %}">Back to Artists</a></p>
+{% endblock %}

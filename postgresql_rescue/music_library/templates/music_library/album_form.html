@@ -1,0 +1,29 @@
+{% extends "core/base.html" %}
+
+{% block title %}{% if album %}Edit{% else %}Create{% endif %} Album{% endblock %}
+
+{% block content %}
+<h2>{% if album %}Edit{% else %}Create{% endif %} Album</h2>
+
+<form method="post">
+    {% csrf_token %}
+    <p>
+        <label>Title:</label><br>
+        <input type="text" name="title" value="{{ album.title|default_if_none:'' }}">
+    </p>
+    <p>
+        <label>Artist ID:</label><br>
+        <input type="number" name="artist_id" value="{{ album.artist.id|default_if_none:'' }}">
+    </p>
+    <p>
+        <label>Release year:</label><br>
+        <input type="number" name="release_Year" value="{{ album.release_Year|default_if_none:'' }}">
+    </p>
+    <p>
+        <label>Is concept album?</label>
+        <input type="checkbox" name="is_Concept_Album" {% if album.is_Concept_Album %}checked{% endif %}>
+    </p>
+    <button type="submit">{% if album %}Update{% else %}Create{% endif %}</button>
+    <a href="{% url 'album_list' %}">Cancel</a>
+</form>
+{% endblock %}

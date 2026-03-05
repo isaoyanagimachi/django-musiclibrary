@@ -1,0 +1,30 @@
+{% extends 'core/base.html' %}
+{% block title %} Albums - Music Library {% endblock %}
+
+{% block content %}
+<h2>
+    {% if selected_artist %}
+        Albums by {{ selected_artist.name }}
+    {% else %}
+        All Albums ({{ albums.count }})
+    {% endif %}
+</h2>
+
+<p>
+    <a href="{% url 'album_create' %}">+ Add new album</a>
+    {% if selected_artist %}
+        | <a href="{% url 'album_list' %}">View All Artists</a>
+    {% endif %}
+</p>
+
+<ul>
+    {% for album in albums %}
+        <li>
+            <a href="{% url 'album_detail' album.pk %}">{{ album.title }}</a> 
+            — <small>{{ album.artist.name }}</small>
+        </li>
+    {% empty %}
+        <li>No albums found for this criteria.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

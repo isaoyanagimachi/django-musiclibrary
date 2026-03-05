@@ -4,8 +4,12 @@ from .models import Artist, Album, Track, Genre
 
 @admin.register(Artist)
 class ArtistAdmin(admin.ModelAdmin):
-    list_display = ('name','country', 'genre')
-    search_fields = ('name','genre', 'country')
+    list_display = ('name','country', 'get_genres')
+    search_fields = ('name','genre__name', 'country')
+
+
+    def get_genres(self, obj):
+        return ", ".join([g.name for g in obj.genre.all()])
 
 @admin.register(Album)
 class AlbumAdmin(admin.ModelAdmin):
@@ -21,11 +25,10 @@ class TrackAdmin(admin.ModelAdmin):
 
 @admin.register(Genre)
 class GenreAdmin(admin.ModelAdmin):
-    list_display = ('name', 'get_artists_names')
+    list_display = ('name',)
+    list_filter = ('name',)
     search_fields = ('name',)
 
-    def get_artists_names(self, obj):
-        return ", ".join([g.name for g in obj.artists.all()])
 
 
 
