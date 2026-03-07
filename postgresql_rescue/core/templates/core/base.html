@@ -1,21 +1,45 @@
-<html>
-<header>
-    <title>{% block title %} PostgreSQL {% endblock %}</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/main.css' %}">
-</header>
-<body>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}PostgreSQL Rescue Records{% endblock %}</title>
 
-    {% include "core/_navbar.html" %}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+<div class="wrapper">
+    <nav>
+        <div class="brand">
+            PostgreSQL Rescue Records
+        </div>
+        <div>
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'album_list' %}">Albums</a>
+            <a href="{% url 'artist_list' %}">Artists</a>
+            <a href="/admin/">Admin</a>
+        </div>
+    </nav>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="message{% if message.tags %} {{ message.tags }}{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
 
     <main>
-        {% include "core/_messages.html" %}
         {% block content %}{% endblock %}
     </main>
 
     <footer>
-        <hr>
-        <p>&copy; {% now "Y" %} PostgreSQL Rescue Records Platform.</p>
+        © 2026 PostgreSQL Rescue Records Platform.
     </footer>
+
+    {% block extra_js %}{% endblock %}
+</div>
 </body>
 </html>
