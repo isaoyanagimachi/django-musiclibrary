@@ -1,22 +1,52 @@
 {% extends "core/base.html" %}
 
-{% block title %}Artists - PostgreSQL Rescue{% endblock %}
+{% block title %}Artists - PostgreSQL Rescue Records{% endblock %}
 
 {% block content %}
-<h2>Artists</h2>
+    <h1>Artists ({{ artists|length }})</h1>
 
-<ul>
-    {% for artist in artists %}
-        <li>
-            <a href="{% url 'artist_detail' artist.pk %}">
-                {{ artist.name }}
-            </a>
-            {% if artist.country %}
-                - {{ artist.country }}
-            {% endif %}
-        </li>
-    {% empty %}
-        <li>No artists yet.</li>
-    {% endfor %}
-</ul>
+    <div class="filter-bar">
+        <form method="get">
+            <label for="q">Search by name:</label>
+            <input
+                type="search"
+                name="q"
+                id="q"
+                value="{{ request.GET.q }}"
+                placeholder="Type artist name"
+            >
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+
+    {% if artists %}
+        <ul class="album-list">
+            {% for artist in artists %}
+            <li>
+                <div class="album-main">
+                    <div class="album-title">
+                        <a href="{% url 'artist_detail' artist.pk %}">
+                            {{ artist.name }}
+                        </a>
+                    </div>
+                    <div class="album-meta">
+                        Genre:
+                        {% for genre in artist.genre.all %}
+                        {{ genre }}
+                        &nbsp;&nbsp;
+                        {% endfor %}
+                        Albums: {{ artist.Albums.count }}
+                    </div>
+                </div>
+                <span class="badge">
+                    ID: {{ artist.pk }}
+                </span>
+            </li>
+            {% endfor %}
+        </ul>
+
+    {% else %}
+        <p>No artists found.</p>
+    {% endif %}
 {% endblock %}

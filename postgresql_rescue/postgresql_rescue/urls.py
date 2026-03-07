@@ -22,7 +22,7 @@ from music_library import views as ml_views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('', home, name='home'),
+    path('', ml_views.AlbumListView.as_view(), name='album_list'),
     path('about/', about, name='about'),
     path('album/', album_detail, name='album_detail'),
     #path('albums/', ml_views.album_list, name='album_list'),

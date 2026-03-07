@@ -1,42 +1,42 @@
+{% extends "core/base.html" %}
+
+{% block title %}{{ artist.name }} - Artist{% endblock %}
+
 {% block content %}
-<h2>{{ artist.name }}</h2>
+    <h1>{{ artist.name }}</h1>
+    <h2>Country </h2>
+    <h4>{{ artist.country }}</h4>
+    <h2>Genres</h2>
 
-{% if artist.country %}
-<p>Country: {{ artist.country }}</p>
-{% endif %}
+    {% for genre in artist.genre.all %}
+        <h5>{{ genre.name }}</h5>
+    {% empty %}
+        <h5>No genres</h5>
+    {% endfor %}
 
-<p>Genres:
-    {% with artist.genre.all as genres %}
-        {% if genres %}
-            {% for genre in genres %}
-                {{ genre.name }}{% if not forloop.last %}, {% endif %}
-            {% endfor %}
-        {% else %}
-            <em>No genres tagged yet.</em>
-        {% endif %}
-    {% endwith %}
-</p>
-<h3>Albums</h3>
-{% with artist.Albums.all as albums %}
-    {% if albums %}
-        <ul>
-            {% for album in albums %}
+
+    <h2>Albums</h2>
+    {% if artist.Albums.all %}
+        <ul class="album-list">
+            {% for album in artist.Albums.all %}
                 <li>
-                    <a href="{% url 'album_detail' album.pk %}">
-                        {{ album.title }}
-                    </a>
-                    {% if album.release_Year %}
-                        ({{ album.release_Year }})
-                    {% endif %}
+                    <div class="album-main">
+                        <div class="album-title">
+                            <a href="{% url 'album_detail' album.pk %}">
+                                {{ album.title }}
+                            </a>
+                        </div>
+                        <div class="album-meta">
+                            Released: {{ album.release_Year }}
+                        </div>
+                    </div>
+                    <span class="badge">
+                        {{ album.pk }}
+                    </span>
                 </li>
             {% endfor %}
         </ul>
     {% else %}
-        <p>No albums for this artist yet.</p>
+        <p>This artist has no albums yet.</p>
     {% endif %}
-{% endwith %}
-
-<p>
-    <a href="{% url 'artist_list' %}">Back to Artists</a>
-</p>
 {% endblock %}

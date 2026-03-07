@@ -1,38 +1,53 @@
-{% extends 'core/base.html' %}
-{% block title %} Albums - Music Library {% endblock %}
+{% extends "core/base.html" %}
 
+{% block title %}Albums - PostgreSQL Rescue Records{% endblock %}
 
 {% block content %}
-<h2>Albums ({{ total }})</h2>
+    <h1>Albums ({{ albums|length }})</h1>
 
-<form method="get">
-    <label>Filter by artist ID:</label>
-    <input type="number" name="artist_id" value="{{ request.GET.artist_id }}">
-    <button type="submit">Filter</button>
-    {% if request.GET.artist_id %}
-        <a href="{% url 'album_list' %}">Clear</a>
-    {% endif %}
-</form>
+    <div class="filter-bar">
+        <form method="get">
+            <label for="artist_id">Filter by artist ID:</label>
+            <input
+                type="number"
+                name="artist_id"
+                id="artist_id"
+                value="{{ request.GET.artist_id }}"
+                placeholder="e.g. 1"
+            >
+            <button type="submit">Filter</button>
+        </form>
+    </div>
+    <a href="{% url 'album_create' %}" class="action-link">
+        Add new album
+    </a>
 
-<p><a href="{% url 'album_create' %}">+ Add new album</a></p>
-
-{% if albums %}
-    <ul>
-        {% for album in albums %}
-            <li>
-                <a href="{% url 'album_detail' album.pk %}">
-                    {{ album.title }} ({{ album.artist.name }})
-                </a>
-                {% if album.release_Year %}
-                    - {{ album.release_Year }}
-                {% endif %}
-                {% if album.is_Concept_Album %}
-                    <strong>[Concept]</strong>
-                {% endif %}
-            </li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>No albums yet.</p>
+    {% if albums %}
+        <ul class="album-list">
+            {% for album in albums %}
+                <li>
+                    <div class="album-main">
+                        <div class="album-title">
+                            <a href="{% url 'album_detail' album.pk %}">
+                                {{ album.title }}
+                            </a>
+                        </div>
+                        <div class="album-meta">
+                            by {{ album.artist.name }}
+                            &nbsp;•&nbsp;
+                            Released: {{ album.release_year }}
+                            {% if album.genre %}
+                                &nbsp;•&nbsp; Genre: {{ album.genre }}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <span class="badge">
+                        ID: {{ album.pk }}
+                    </span>
+               </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+         <p>No albums yet.</p>
 {% endif %}
 {% endblock %}
