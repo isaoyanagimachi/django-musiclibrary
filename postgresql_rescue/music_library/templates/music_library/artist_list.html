@@ -1,22 +1,22 @@
 {% extends "core/base.html" %}
 
-{% block title %}Artists - Music Library{% endblock %}
+{% block title %}Artists - PostgreSQL Rescue{% endblock %}
 
 {% block content %}
-<h2>All Artists</h2>
+<h2>Artists</h2>
+
 <ul>
     {% for artist in artists %}
         <li>
-            <a href="{% url 'artist_detail' artist.pk %}"><strong>{{ artist.name }}</strong></a> 
-            ({{ artist.country|default:"Unknown Country" }})
-            <br>
-            <small>Genres: 
-                {% for g in artist.genre.all %}{{ g.name }}{% if not forloop.last %}, {% endif %}{% endfor %}
-            </small>
+            <a href="{% url 'artist_detail' artist.pk %}">
+                {{ artist.name }}
+            </a>
+            {% if artist.country %}
+                - {{ artist.country }}
+            {% endif %}
         </li>
     {% empty %}
-        <li>No artists found.</li>
+        <li>No artists yet.</li>
     {% endfor %}
 </ul>
-<p><a href="{% url 'album_list' %}">View All Albums</a></p>
 {% endblock %}

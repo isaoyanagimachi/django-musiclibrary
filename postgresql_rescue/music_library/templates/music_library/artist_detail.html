@@ -1,41 +1,42 @@
-{% extends "core/base.html" %}
-
-{% block title %}{{ artist.name }} Details{% endblock %}
-
 {% block content %}
-<h2>Artist: {{ artist.name }}</h2>
-<p><strong>Country:</strong> {{ artist.country|default:"N/A" }}</p>
-<p><strong>Genres:</strong> 
-    {% for g in artist.genre.all %}
-        <span class="badge">{{ g.name }}</span>{% if not forloop.last %}, {% endif %}
-    {% endfor %}
-</p>
+<h2>{{ artist.name }}</h2>
 
-<hr>
-
-<h3>Discography ({{ albums.count }} Albums)</h3>
-{% if albums %}
-    <table>
-        <thead>
-            <tr>
-                <th>Year</th>
-                <th>Title</th>
-                <th>Concept?</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for album in albums %}
-            <tr>
-                <td>{{ album.release_Year|default:"----" }}</td>
-                <td><a href="{% url 'album_detail' album.pk %}">{{ album.title }}</a></td>
-                <td>{{ album.is_Concept_Album|yesno:"✅,❌" }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-{% else %}
-    <p>No albums recorded for this artist yet.</p>
+{% if artist.country %}
+<p>Country: {{ artist.country }}</p>
 {% endif %}
 
-<p><a href="{% url 'artist_list' %}">Back to Artists</a></p>
+<p>Genres:
+    {% with artist.genre.all as genres %}
+        {% if genres %}
+            {% for genre in genres %}
+                {{ genre.name }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        {% else %}
+            <em>No genres tagged yet.</em>
+        {% endif %}
+    {% endwith %}
+</p>
+<h3>Albums</h3>
+{% with artist.Albums.all as albums %}
+    {% if albums %}
+        <ul>
+            {% for album in albums %}
+                <li>
+                    <a href="{% url 'album_detail' album.pk %}">
+                        {{ album.title }}
+                    </a>
+                    {% if album.release_Year %}
+                        ({{ album.release_Year }})
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No albums for this artist yet.</p>
+    {% endif %}
+{% endwith %}
+
+<p>
+    <a href="{% url 'artist_list' %}">Back to Artists</a>
+</p>
 {% endblock %}

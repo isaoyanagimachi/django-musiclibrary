@@ -4,10 +4,21 @@
 
 {% block content %}
 <h2>{{ album.title }}</h2>
-<p>Artist: {{ album.artist.name }}</p>
-{% if album.release_Year %}
-<p>Year: {{ album.release_Year }}</p>
-{% endif %}
+
+<p>
+    Artist:
+    <a href="{% url 'artist_detail' album.artist.pk %}">{{ album.artist.name }}</a>
+</p>
+
+<p>
+    Year:
+    {% if album.release_Year %}
+        {{ album.release_Year }}
+    {% else %}
+        <em>Unknown</em>
+    {% endif %}
+</p>
+
 <p>Concept album: {{ album.is_Concept_Album|yesno:"Yes,No" }}</p>
 
 <p>
@@ -20,7 +31,11 @@
 {% if tracks %}
     <ol>
     {% for track in tracks %}
-        <li>{{ track.track_Number }}. {{ track.title }} ({{ track.duration_Seconds }}s)</li>
+        <li>
+            {{ track.track_Number }}.
+            {{ track.title }}
+            ({{ track.duration_Seconds|default:"N/A" }} s)
+        </li>
     {% endfor %}
     </ol>
 {% else %}

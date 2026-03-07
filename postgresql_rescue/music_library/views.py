@@ -217,6 +217,11 @@ class ArtistListView(ListView):
     context_object_name = "artists"
     ordering = ['name']
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total'] = context['artists'].count()
+        return context
+
     def get_queryset(self):
         return super().get_queryset().prefetch_related('genre')
 
@@ -232,3 +237,20 @@ class ArtistDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['albums'] = self.object.Albums.all()
         return context
+
+# class ArtistCreateView(CreateView):
+#     model = Artist
+#     form_class = ArtistForm
+#     template_name = "music_library/artist_form.html"
+#
+#     def get_success_url(self):
+#         return reverse(viewname="artist_detail", kwargs={"pk": self.object.pk})
+#
+#
+# class ArtistUpdateView(UpdateView):
+#     model = Artist
+#     form_class = ArtistForm
+#     template_name = "music_library/artist_form.html"
+#
+#     def get_success_url(self):
+#         return reverse(viewname="artist_detail", kwargs={"pk": self.object.pk})
