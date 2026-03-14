@@ -1,7 +1,31 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
+
+from django.contrib import messages
+#from .forms import AlbumForm
 
 from django.http import HttpResponse
 from datetime import datetime
+
+from .forms import SignUpForm
+from django.contrib.auth.decorators import login_required
+
+
+
+@login_required
+def profile(request):
+    return render(request, "core/profile.html")
+def signup(request):
+    if request.method == "POST":
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Account created. Please log in.")
+            return redirect("login")
+    else:
+        form = SignUpForm()
+    return render(request, "core/signup.html", {"form": form})
+
+
 
 
 # Create your views here.

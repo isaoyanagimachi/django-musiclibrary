@@ -1,0 +1,22 @@
+	{% extends "core/base.html" %}
+{% block title %}New Menu Item{% endblock %}
+
+{% block content %}
+  <h1>Create Menu Item</h1>
+
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-grid">
+      {% for field in form %}
+        <div class="form-field">
+          {{ field.label_tag }} {{ field }}
+          {% for error in field.errors %}
+            <div class="message error">{{ error }}</div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+    <button type="submit">Save item</button>
+
+  </form>
+{% endblock %}

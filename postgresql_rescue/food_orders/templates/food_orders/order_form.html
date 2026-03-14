@@ -1,0 +1,38 @@
+{% extends "core/base.html" %}
+{% block title %}Place Order{% endblock %}
+{% block content %}
+  <h1>Place a Food Order</h1>
+
+  <form method="post">
+    {% csrf_token %}
+
+    <h2>Customer details</h2>
+    <div class="form-grid">
+      {% for field in order_form %}
+        <div class="form-field">
+          {{ field.label_tag }}
+          {{ field }}
+          {% for error in field.errors %}
+            <div class="message error">{{ error }}</div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+
+    <h2>Items</h2>
+    {{ formset.management_form }}
+    <div class="form-grid">
+      {% for form in formset %}
+        <div class="form-field">
+          {{ form.menu_item.label_tag }} {{ form.menu_item }}
+          {{ form.quantity.label_tag }} {{ form.quantity }}
+          {% for error in form.non_field_errors %}
+            <div class="message error">{{ error }}</div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+
+    <button type="submit">Place order</button>
+  </form>
+{% endblock %}

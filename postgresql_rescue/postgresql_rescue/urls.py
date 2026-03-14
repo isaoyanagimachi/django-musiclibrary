@@ -16,9 +16,12 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from core.views import home, about, album_detail, contact, roadmap, greet
 from music_library import views as ml_views
+from food_orders import views as food_views
+from core import views as core_views
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -26,6 +29,7 @@ urlpatterns = [
     path('about/', about, name='about'),
     path('album/', album_detail, name='album_detail'),
     #path('albums/', ml_views.album_list, name='album_list'),
+    path('albums/create/', ml_views.AlbumCreateView.as_view(), name='album_crete'),
     path('albums/', ml_views.AlbumListView.as_view(), name='album_list'),
     path('albums/<int:pk>/', ml_views.AlbumDetailView.as_view(), name='album_detail'),
    # path('albums/create/', ml_views.album_create, name='album_create'),
@@ -35,11 +39,22 @@ urlpatterns = [
     path("albums/<int:pk>/delete/", ml_views.AlbumDeleteView.as_view(), name="album_delete"),
     #path('artists/', ml_views.artist_list, name='artist_list'),
     #path('artists/<int:pk>/', ml_views.artist_detail, name='artist_detail'),
-    path('contact/', contact, name='contact'),
+    path("contact/", ml_views.contact, name="contact_form"),
+    path("contact/thanks/", ml_views.contact_thanks, name="contact_thanks"),
     path('roadmap/', roadmap, name='roadmap'),
     path('greet/<str:name>', greet, name='greet'),
 	path('albums/create/', ml_views.AlbumCreateView.as_view(), name='album_create'),
     path('albums/<int:pk>/edit/', ml_views.AlbumUpdateView.as_view(), name='album_update'),
     path('artists/', ml_views.ArtistListView.as_view(), name='artist_list'),
     path('artists/<int:pk>/', ml_views.ArtistDetailView.as_view(), name='artist_detail'),
+    path("food/", food_views.menu_home, name="food_home"),
+    path("food/orders/new/", food_views.order_create, name="order_create"),
+    path("food/orders/", food_views.order_list, name="order_list"),
+    path("food/orders/<int:pk>/", food_views.order_detail, name="order_detail"),
+    path("food/categories/new/", food_views.category_create, name="category_create"),
+    path("food/items/new/", food_views.menuitem_create, name="menuitem_create"),
+    path("accounts/", include("django.contrib.auth.urls")),
+    path("accounts/signup/", core_views.signup, name="signup"),
+    path("accounts/profile/", core_views.profile, name="profile"),
+
 ]

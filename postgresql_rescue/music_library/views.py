@@ -1,9 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Artist, Album
 from django.contrib import messages
+from django.http import HttpResponse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy, reverse
-from .forms import AlbumForm
+from .forms import AlbumForm, ContactForm
 
 # def album_list(request):
 #     # Displays list of all albums
@@ -254,3 +255,20 @@ class ArtistDetailView(DetailView):
 #
 #     def get_success_url(self):
 #         return reverse(viewname="artist_detail", kwargs={"pk": self.object.pk})
+
+def contact(request):
+    if request.method == "POST":
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            # In real life, send email here
+            subject = form.cleaned_data["subject"]
+            email = form.cleaned_data["email"]
+            print("Pretend sending email:", subject, email)
+            return redirect("contact_thanks")
+    else:
+        form = ContactForm()
+
+    return render(request, "music_library/contact_form.html", {"form": form})
+
+def contact_thanks(request):
+    return HttpResponse("Thanks for contacting PostgreSQL Rescue Records!")

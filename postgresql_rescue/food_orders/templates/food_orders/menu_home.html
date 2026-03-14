@@ -1,0 +1,35 @@
+{% extends "core/base.html" %}
+{% block title %}Food Orders Menu{% endblock %}
+
+{% block content %}
+  <h1>Food Menu</h1>
+
+  <a href="{% url 'order_create' %}" class="action-link">
+    Place a new order
+  </a>
+	<a href="{% url 'category_create' %}" class="action-link">Add category</a>
+<a href="{% url 'menuitem_create' %}" class="action-link">Add menu item</a>
+
+  {% for category in categories %}
+    <h2>{{ category.name }}</h2>
+    <ul class="album-list">
+      {% for item in category.items.all %}
+        <li>
+          <div class="album-main">
+            <div class="album-title">
+              {{ item.name }} - ${{ item.price }}
+            </div>
+            <div class="album-meta">
+              {% if item.description %}{{ item.description }}{% endif %}
+              {% if not item.is_available %}
+                <span class="badge">Not available</span>
+              {% endif %}
+            </div>
+          </div>
+        </li>
+      {% empty %}
+        <li>No items in this category yet.</li>
+      {% endfor %}
+    </ul>
+  {% endfor %}
+{% endblock %}

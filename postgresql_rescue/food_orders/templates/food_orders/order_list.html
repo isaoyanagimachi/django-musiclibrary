@@ -1,0 +1,29 @@
+{% extends "core/base.html" %}
+{% block title %}Orders{% endblock %}
+
+{% block content %}
+  <h1>Recent Orders</h1>
+  <ul class="album-list">
+    {% for order in orders %}
+      <li>
+        <div class="album-main">
+          <div class="album-title">
+            <a href="{% url 'order_detail' order.pk %}">
+              Order #{{ order.id }} - {{ order.customer_name }}
+            </a>
+          </div>
+          <div class="album-meta">
+            Total: ₹{{ order.total_amount }} • {{ order.created_at|date:"M d, H:i" }}
+          </div>
+        </div>
+        {% if order.is_delivered %}
+          <span class="badge">Delivered</span>
+        {% else %}
+          <span class="badge">Pending</span>
+        {% endif %}
+      </li>
+    {% empty %}
+      <p>No orders yet.</p>
+    {% endfor %}
+  </ul>
+{% endblock %}

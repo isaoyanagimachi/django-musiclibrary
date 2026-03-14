@@ -1,0 +1,37 @@
+{% extends "realestate/base.html" %}
+{% block title %}{{ property.title }}{% endblock %}
+
+{% block content %}
+  <h2>{{ property.title }}</h2>
+  <p>{{ property.city }}{% if property.area_name %}, {{ property.area_name }}{% endif %}</p>
+  <p>{{ property.get_property_type_display }} • {{ property.bedrooms }} BHK • {{ property.carpet_area_sqft }} sq.ft</p>
+  <p>Status: {{ property.get_status_display }} • Price: ₹ {{ property.price }}</p>
+
+  <img src="{{ property.main_image.url }}" alt="{{ property.title }}" class="hero-image">
+
+  <h3>Description</h3>
+  <p>{{ property.description|linebreaks }}</p>
+
+  <h3>Floor plan</h3>
+  {% if property.floorplan_file %}
+    <p>
+      <a href="{{ property.floorplan_file.url }}" download>
+        Download floor‑plan file
+      </a>
+      <small>(image or PDF uploaded by the agent)</small>
+    </p>
+  {% else %}
+    <p>No floor‑plan file uploaded yet.</p>
+  {% endif %}
+
+  <h3>Contact the agent</h3>
+  <form method="post" action="{% url 'property_inquiry' slug=property.slug %}">
+      {% csrf_token %}
+<input type="text" name="name" placeholder="Your name" required>
+<input type="email" name="email" placeholder="Your email" required>
+<input type="text" name="phone" placeholder="Phone (optional)">
+<textarea name="message" rows="4" placeholder="Message"></textarea>
+<button type="submit">Send inquiry</button>
+</form>
+
+{% endblock %}

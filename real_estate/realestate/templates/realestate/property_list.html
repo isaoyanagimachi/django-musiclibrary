@@ -1,0 +1,42 @@
+{% extends "realestate/base.html" %}
+{% block title %}Browse properties{% endblock %}
+
+{% block content %}
+  <h2>Find your next home</h2>
+
+  <form method="get" class="filter-form">
+    <input type="text" name="city" placeholder="City" value="{{ request.GET.city }}">
+    <select name="status">
+      <option value="">Any status</option>
+      <option value="sale" {% if request.GET.status == 'sale' %}selected{% endif %}>For Sale</option>
+      <option value="rent" {% if request.GET.status == 'rent' %}selected{% endif %}>For Rent</option>
+    </select>
+    <select name="type">
+      <option value="">Any type</option>
+      <option value="apartment">Apartment</option>
+      <option value="villa">Villa</option>
+      <option value="plot">Plot / Land</option>
+      <option value="office">Office</option>
+    </select>
+    <input type="number" name="min_price" placeholder="Min price" value="{{ request.GET.min_price }}">
+    <input type="number" name="max_price" placeholder="Max price" value="{{ request.GET.max_price }}">
+    <button type="submit">Search</button>
+  </form>
+
+<div class="property-grid">
+    {% for p in properties %}
+    <article class="property-card">
+        <a href="{% url 'property_detail' slug=p.slug %}">
+            <img src="{{ p.main_image.url }}" alt="{{ p.title }}">
+            <h3>{{ p.title }}</h3>
+            <p>{{ p.city }}{% if p.area_name %}, {{ p.area_name }}{% endif %}</p>
+            <p>{{ p.get_property_type_display }} • {{ p.bedrooms }} BHK • {{ p.carpet_area_sqft }} sq.ft</p>
+            <p>{{ p.price }}</p>
+        </a>
+    </article>
+    {% empty %}
+        <p>No properties found.</p>
+    {% endfor %}
+</div>
+
+{% endblock %}

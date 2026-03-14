@@ -19,6 +19,21 @@
             <a href="{% url 'album_list' %}">Home</a>
             <a href="{% url 'album_list' %}">Albums</a>
             <a href="{% url 'artist_list' %}">Artists</a>
+            <a href="{% url 'contact_form' %}">Contact</a>
+            {% if request.user.is_authenticated %}
+              <span>Hi, {{ request.user.username }}</span>
+
+              <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit"
+                        style="background:none;border:none;color:inherit;padding:0;cursor:pointer;">
+                  Logout
+                </button>
+              </form>
+            {% else %}
+              <a href="{% url 'login' %}">Login</a>
+              <a href="{% url 'signup' %}">Sign up</a>
+            {% endif %}
             <a href="/admin/">Admin</a>
         </div>
     </nav>

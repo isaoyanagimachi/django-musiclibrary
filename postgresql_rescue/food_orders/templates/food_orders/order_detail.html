@@ -1,0 +1,26 @@
+{% extends "core/base.html" %}
+{% block title %}Order #{{ order.id }}{% endblock %}
+
+{% block content %}
+  <h1>Order #{{ order.id }}</h1>
+  <p>Customer: {{ order.customer_name }} ({{ order.customer_phone }})</p>
+  <p>Placed at: {{ order.created_at|date:"M d, Y H:i" }}</p>
+
+  <h2>Items</h2>
+  <ul class="album-list">
+    {% for item in order.items.all %}
+      <li>
+        <div class="album-main">
+          <div class="album-title">
+            {{ item.menu_item.name }} × {{ item.quantity }}
+          </div>
+          <div class="album-meta">
+            Price: ₹{{ item.menu_item.price }} • Subtotal: ₹{{ item.subtotal }}
+          </div>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <h2>Total: ₹{{ order.total_amount }}</h2>
+{% endblock %}
